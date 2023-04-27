@@ -1,0 +1,229 @@
+/* container{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgb(0, 0, 0);
+    width: 100%;
+}
+ul{
+    display: flex;
+    justify-content: flex-end;
+}
+h1{
+    color: #DBD31C;
+    font-size:35px;
+    line-height : 80px;
+    padding:0 170px;
+    font-weight:bold;
+}
+h3{ 
+     color: #DBD31C;
+    font-size:35px;
+    line-height : 70px;
+    padding:0 50px;
+    font-weight:bold; 
+}
+hr{
+    color: white;
+    width: 50px;
+    padding: 17px;
+} */
+
+
+
+
+/* Frame 2 */
+container{
+
+    position: absolute;
+    width: 100%;
+    height: 213px;
+    left: 0px;
+    top: 1815px;
+    
+    background: #010101;
+}
+
+
+h1{
+
+    position: absolute;
+    width: 145px;
+    height: 78px;
+    left: 73px;
+    top: 28px;
+    
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 900;
+    font-size: 64px;
+    line-height: 77px;
+    text-align: center;
+    
+    color: rgba(219, 211, 28, 0.97);
+}
+
+/* identical to box height */
+
+
+
+/* Société Lamti De Quincaillerie */
+h3{
+
+    position: absolute;
+    width: 290px;
+    height: 89px;
+    left: 17px;
+    top: 118px;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    
+    color: rgba(219, 211, 28, 0.97);
+}
+
+
+
+/* ABOUT US */
+#about{
+
+    position: absolute;
+    width: 124px;
+    height: 29px;
+    left: 920px;
+    top: 51px;
+    text-decoration: none;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+
+
+
+#produit{
+
+    position: absolute;
+    width: 106px;
+    height: 29px;
+    left: 426px;
+    top: 45px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+
+
+
+#realisation{
+
+    position: absolute;
+    width: 169px;
+    height: 29px;
+    left: 564px;
+    top: 45px;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    text-decoration: none;
+    text-align: center;
+    
+    color: #FFFFFF;
+}
+
+
+
+#contact{
+
+    position: absolute;
+    width: 116px;
+    height: 29px;
+    left: 765px;
+    top: 48px;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    text-decoration: none;
+    text-align: center;
+    
+    color: #FFFFFF;
+}
+
+
+
+
+#devis{
+
+    position: absolute;
+    width: 238px;
+    height: 29px;
+    left: 1119px;
+    top: 51px;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    text-decoration: none;
+    text-align: center;
+    
+    color: #FA0641;
+}
+
+
+
+
+
+hr{
+
+    position: absolute;
+    width: 736.5px;
+    height: 0px;
+    left: 507px;
+    top: 120px;
+    
+    
+    border: 2px solid white;
+}
+
+
+
+p{
+
+    position: absolute;
+    width: 366px;
+    height: 29px;
+    left: 569px;
+    top: 156px;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    /* identical to box height */
+    text-align: center;
+    
+    color: #FFFFFF;
+}
+
