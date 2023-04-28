@@ -11,16 +11,19 @@ function Navbar() {
       <label className="logo">SLQ</label>
       <ul id="ulNav">
         <li id="listNav">
-          <a id="lienNav" href="#">Accueil</a>
+          <a id="lienNav" href="/">Accueil</a>
         </li>
         <li id="listNav">
-          <a id="lienNav" href="#">Produits</a>
+          <a id="lienNav" href="/products">Produits</a>
         </li>
         <li id="listNav">
           <a id="lienNav" href="#">réalisations</a>
         </li>
         <li id="listNav">
           <a id="lienNav" href="#">Contact</a>
+        </li>
+        <li id="listNav">
+          <a id="lienNav" href="/login">Connexion</a>
         </li>
         <li id="listNav">
           <a id="devisNav" href="#">demande de devis</a>
