@@ -1,0 +1,14 @@
+.formLogin{
+    width: 35%;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    margin: auto ; 
+    margin-top: 9rem;
+
+}
+.titleLogin{
+    color:rgb(255, 254, 254);
+    text-align: center;
+    font-family: 'Georgia, serif' ;
+}

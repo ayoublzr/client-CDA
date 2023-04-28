@@ -5,7 +5,7 @@ function Footer() {
   return (
     <container >
         <div>
-            <h1>SLQ</h1>
+            <h1 className='logoFooter'>SLQ</h1>
             <h3>Société Lamti De Quincaillerie</h3>
         </div>
         <div>
@@ -20,7 +20,7 @@ function Footer() {
             </nav>
             <hr ></hr>
         </div>
-        <p>© Copyright.All Rights Reserved</p>
+        <p id='textFooter'>© Copyright.All Rights Reserved</p>
     </container>
   )
 }
