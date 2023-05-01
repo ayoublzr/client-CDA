@@ -52,11 +52,12 @@ label.logo{
     text-transform: uppercase ;  
 }
 
-#devisNav.active,#lienNav.active,#devisNav:hover, #lienNav:hover{
+#devisNav:hover, #lienNav:hover{
     background: #FF9A01;
     border-radius: 25%;
     transition: .5s;
 }
+
 .checkbtn{
     font-size:30px;
     color:white;

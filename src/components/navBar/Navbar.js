@@ -26,7 +26,7 @@ function Navbar() {
           <a id="lienNav" href="/login">Connexion</a>
         </li>
         <li id="listNav">
-          <a id="devisNav" href="#">demande de devis</a>
+          <a id="devisNav" href="/devis">demande de devis</a>
         </li>
       </ul>
     </nav>
