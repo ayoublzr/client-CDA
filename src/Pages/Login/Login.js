@@ -50,10 +50,10 @@ function Login() {
           <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </Form.Group>
         <Form.Group >
-          <a href="/register">Crée un compt</a>
+          <a href="/register">Créer un compte</a>
         </Form.Group>
         <Button variant="primary" type="submit">
-          Submit
+          Se connecter
         </Button>
         {errorMessage && (
           <Alert variant="danger" className="mt-3">
@@ -62,7 +62,6 @@ function Login() {
         )}
       </Form>
       <Footer />
-
     </div>
   )
 }
