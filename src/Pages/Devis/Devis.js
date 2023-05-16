@@ -1,11 +1,8 @@
 
-
-
-
-
 import Navbar from "../../components/navBar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import React, { useState, useEffect } from "react";
+import jwt from "jwt-decode";
 import axios from "axios";
 import "./styleDevis.css";
 import { Button, FloatingLabel, Form, InputGroup } from "react-bootstrap";
@@ -13,137 +10,244 @@ import { Button, FloatingLabel, Form, InputGroup } from "react-bootstrap";
 function Devis() {
   const [categories, setCategories] = useState([]);
   const [produits, setProduits] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [categorie, setCategorie] = useState("");
-  const [product, setProduct] = useState("");
-  const [surface, setSurface] = useState("");
-  const [description, setDescription] = useState("");
-  const [token, setToken] = useState('');
+  const [id, setId] = useState();
+  const [commentaire, setCommentaire] = useState("");
+
+  const [forms, setForms] = useState([
+    { categorie: "", product: "", surface: "", description: "" },
+  ]);
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/categories")
       .then((res) => {
-        console.log(res.data);
         setCategories(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    if (selectedCategory) {
-      axios
-        .get(
-          `http://localhost:3000/api/products/categorie/${selectedCategory}`
-        )
-        .then((res) => {
-          console.log(res.data);
-          setProduits(res.data);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [selectedCategory]);
-
+    forms.forEach((form, index) => {
+      if (form.categorie) {
+        axios
+          .get(`http://localhost:3000/api/products/categorie/${form.categorie}`)
+          .then((res) => {
+            const updatedProduits = [...produits];
+            updatedProduits[index] = res.data;
+            setProduits(updatedProduits);
+          })
+          .catch((err) => console.log(err));
+      }
+    });
+  }, [forms]);
   useEffect(() => {
     // Logique pour récupérer le token du client
-    const token = localStorage.getItem('token'); // Exemple : stockage du token dans le localStorage
+     localStorage.getItem("token"); // Exemple : stockage du token dans le localStorage
+    const dataToken = jwt(token);
+    setId(dataToken.id);
+    
 
     setToken(token);
-  }, []);
-
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
-    setCategorie(e.target.value);
+    
+  }, [token]);
+  const handleCommentaireChange = (e) => {
+    const { value } = e.target;
+    setCommentaire(value);
   };
+
+  const handleCategoryChange = (e, index) => {
+    const { value } = e.target;
+    setForms((prevForms) =>
+      prevForms.map((form, i) =>
+        i === index ? { ...form, categorie: value, product: "" } : form
+      )
+    );
+  };
+
+  const handleProductChange = (e, index) => {
+    const { value } = e.target;
+    setForms((prevForms) =>
+      prevForms.map((form, i) =>
+        i === index ? { ...form, product: value } : form
+      )
+    );
+  };
+
+  const handleSurfaceChange = (e, index) => {
+    const { value } = e.target;
+    setForms((prevForms) =>
+      prevForms.map((form, i) =>
+        i === index ? { ...form, surface: value } : form
+      )
+    );
+  };
+
+  const handleDescriptionChange = (e, index) => {
+    const { value } = e.target;
+    setForms((prevForms) =>
+      prevForms.map((form, i) =>
+        i === index ? { ...form, description: value } : form
+      )
+    );
+  };
+
+  const handleAddForm = () => {
+    setForms((prevForms) => [
+      ...prevForms,
+      { categorie: "", product: "", surface: "", description: "" },
+    ]);
+  };
+
+  const handleRemoveForm = (index) => {
+    setForms((prevForms) => prevForms.filter((form, i) => i !== index));
+  };
+ 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:3000/api/devis", {
-      categorie: categorie,
-      product: product,
-      surface: surface,
-      description: description,
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((res) => {
-      console.log(res.data);
-      // Réinitialiser les champs après le succès de la requête
-      setSelectedCategory("");
-      setCategorie("");
-      setProduct("");
-      setSurface("");
-      setDescription("");
-    })
-    .catch((err) => {
-      console.log(err);
-      // Gérer les erreurs et afficher un message d'erreur approprié
-    });
-  };
-
-  const handleProductChange = (e) => {
-    setProduct(e.target.value);
-  };
-
-  const handleSurfaceChange = (e) => {
-    setSurface(e.target.value);
-  };
-
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+  
+    const devisData = {
+      UserId: id,
+      commentaire: commentaire,
+      token: token
+    };
+  
+    // Envoyer la requête pour créer le devis
+    axios
+      .post("http://localhost:3000/api/devis", devisData)
+      .then((res) => {
+        const devisId = res.data.id; // Récupérer l'ID du devis créé
+        
+        
+        const sendEmailToAdmin = (DeviId) => {
+          const devisData = {
+            UserId: id,
+            token: token,
+            DeviId: DeviId,
+          };
+        
+          axios.post("http://localhost:3000/api/sendDevis", devisData)
+            .then((res) => {
+              console.log("E-mail sent successfully!");
+            })
+            .catch((error) => {
+              console.log("Error sending e-mail:", error);
+            });
+        };
+  
+        // Créer les devisDetails pour chaque produit dans le formulaire
+        const requests = forms.map((form) => {
+          const devisDetailsData = {
+            surface: form.surface,
+            detail: form.description,
+            DeviId: devisId,
+            ProductId: form.product,
+          };
+          
+  
+          // Retourner la promesse pour chaque requête de création de devisDetails
+          return axios.post("http://localhost:3000/api/devis-details", devisDetailsData);
+        });
+  
+        // Exécuter toutes les requêtes de création de devisDetails en parallèle
+        return Promise.all(requests)
+          .then(() => {
+            // Réinitialiser le formulaire après la création du devis
+            setForms([{ categorie: "", product: "", surface: "", description: "" }]);
+            // Autres actions de réussite (affichage d'un message, redirection, etc.)
+      sendEmailToAdmin( devisId);
+            
+          })
+          
+          .catch((error) => {
+            console.log(error);
+            // Gérer les erreurs (affichage d'un message, etc.)
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        // Gérer les erreurs (affichage d'un message, etc.)
+      });
   };
 
   return (
     <div>
       <Navbar />
-      <Form className="formDevis" onSubmit={handleSubmit}>
-        <Form.Select
-          aria-label="Default select example"
-          onChange={handleCategoryChange}
-          value={selectedCategory} // Ajout de la valeur sélectionnée
-        >
-            {/* Désactiver l'option par défaut */}
-          <option disabled value="">Categorie</option> 
-          {categories.map((categorie) => (
-         <option key={categorie.id} value={categorie.id}>
-         {categorie.name}
-       </option>
-          ))}
-        </Form.Select>
-        <Form.Select
-          aria-label="Default select example"
-          onChange={handleProductChange}
-          value={product} // Ajout de la valeur sélectionnée
-        >
-          <option disabled value="">Produit</option> {/* Désactiver l'option par défaut */}
-          {produits.map((produit) => (
-            <option key={produit.id} value={produit.id}>
-              {produit.name}
-            </option>
-          ))}
-        </Form.Select>
-        <InputGroup className="mb-3" onChange={handleSurfaceChange}>
-          <InputGroup.Text>Surface</InputGroup.Text>
-          <Form.Control
-            aria-label="Amount (to the nearest dollar)"
-            value={surface} // Ajout de la valeur saisie
-          />
-          <InputGroup.Text>m2</InputGroup.Text>
-        </InputGroup>
-        <FloatingLabel
-          controlId="floatingTextarea"
-          label="Comments"
-          className="mb-3"
-        >
+      <Form className="formDevis" onSubmit={handleSubmit} action="http://localhost:3000/api/sendDevis" method="POST">
+        {forms.map((form, index) => (
+          <div key={index}>
+            <Form.Select
+              aria-label="Default select example"
+              onChange={(e) => handleCategoryChange(e, index)}
+              value={form.categorie}
+            >
+              <option disabled value="">
+                Catégorie
+              </option>
+              {categories.map((categorie) => (
+                <option key={categorie.id} value={categorie.id}>
+                  {categorie.name}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Select
+              aria-label="Default select example"
+              onChange={(e) => handleProductChange(e, index)}
+              value={form.product}
+            >
+              <option disabled value="">
+                Produit
+              </option>
+              {produits[index]?.map((produit) => (
+                <option key={produit.id} value={produit.id}>
+                  {produit.name}
+                </option>
+              ))}
+            </Form.Select>
+            <InputGroup
+              className="mb-3"
+              onChange={(e) => handleSurfaceChange(e, index)}
+            >
+              <InputGroup.Text>Surface</InputGroup.Text>
+              <Form.Control
+                aria-label="Amount (to the nearest dollar)"
+                defaultValue={form.surface}
+                onChange={(e) => handleSurfaceChange(e, index)}
+              />
+              <InputGroup.Text>m2</InputGroup.Text>
+            </InputGroup>
+            <FloatingLabel
+              controlId="floatingTextarea"
+              label="Comments"
+              className="mb-3"
+            >
+              <Form.Control
+                as="textarea"
+                placeholder="Leave a comment here"
+                onChange={(e) => handleDescriptionChange(e, index)}
+                value={form.description}
+              />
+            </FloatingLabel>
+            {index > 0 && (
+              <Button variant="danger" onClick={() => handleRemoveForm(index)}>
+                Supprimer
+              </Button>
+            )}
+          </div>
+        ))}
+        <Button type="button" onClick={handleAddForm}>
+          Ajouter un produit
+        </Button>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+          <Form.Label>Commentaire :</Form.Label>
           <Form.Control
             as="textarea"
-            placeholder="Leave a comment here"
-            onChange={handleDescriptionChange}
-            value={description} // Ajout de la valeur saisie
+            rows={3}
+            onChange={handleCommentaireChange}
+            value={commentaire}
           />
-        </FloatingLabel>
+        </Form.Group>
         <Button type="submit">Envoyer</Button>
       </Form>
       <Footer />
