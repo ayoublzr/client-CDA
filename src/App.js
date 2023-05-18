@@ -9,6 +9,7 @@ import Products from "./Pages/Products/Products";
 import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import Devis from "./Pages/Devis/Devis";
+import ActivationPage from "./components/ActivationPage/ActivationPage";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/devis" element={<Devis />} />
+      <Route path="/confirm/:activationcode" element={<ActivationPage />} />
     </Routes>
   );
 }
