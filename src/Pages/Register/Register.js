@@ -80,7 +80,7 @@ function Register() {
         <h1 className="titleRegister">Crée un compte</h1>
       
         <Form.Group className="mb-3" controlId="formBasicUsername">
-          <Form.Label>User:</Form.Label>
+          <Form.Label>Nom:</Form.Label>
           <Form.Control
             type="text"
             placeholder="Nom"
@@ -125,7 +125,7 @@ function Register() {
           <Form.Label>Mot de passe:</Form.Label>
           <Form.Control
             type="password"
-            placeholder="Password"
+            placeholder="Mot de passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -144,7 +144,7 @@ function Register() {
           <Form.Label>Confirmation mot de passe:</Form.Label>
           <Form.Control
             type="password"
-            placeholder="Repeat password"
+            placeholder="Confirmer votre mot de passe"
             value={repeatPassword}
             onChange={(e) => setRepeatPassword(e.target.value)}
           />

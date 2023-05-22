@@ -10,6 +10,8 @@ import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import Devis from "./Pages/Devis/Devis";
 import ActivationPage from "./components/ActivationPage/ActivationPage";
+import NewPassword from "./components/resetPassword/newPassword";
+import ResetPassword from "./components/resetPassword/resetPassword";
 
 function App() {
 
@@ -21,7 +23,9 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/devis" element={<Devis />} />
-      <Route path="/confirm/:activationcode" element={<ActivationPage />} />
+      <Route path="/confirm/:activationcode" element={<ActivationPage/>} />
+      <Route path="/newpassword/:activationcode" element={<NewPassword/>} />
+      <Route path="/resetpassword" element={<ResetPassword/>} />
     </Routes>
   );
 }

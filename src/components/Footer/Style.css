@@ -7,7 +7,7 @@ container{
     height: 213px;
     left: 0px;
     top: 1815px;
-    
+    margin-top: 5rem;
     background: #010101;
 }
 
@@ -76,7 +76,7 @@ h3{
 
 
 
-#produit{
+#accueil{
 
     position: absolute;
     width: 106px;
@@ -117,7 +117,7 @@ h3{
 
 
 
-#contact{
+#produit{
 
     position: absolute;
     width: 116px;

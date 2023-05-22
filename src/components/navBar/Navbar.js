@@ -3,52 +3,65 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function Navbar() {
-
   const [auth, setAuth] = useState(false);
-  
-  const[message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
 
-  // axios.defaults.withCredentials = true
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/isAuth`, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((res) => {
-        if (res.data.status === "success") {
-          setAuth(true);
-        } else {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      axios
+        .get(`http://localhost:3000/api/isAuth`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          if (res.data.status === "success") {
+            setAuth(true);
+          } else {
+            setAuth(false);
+            setMessage(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
           setAuth(false);
-          setMessage(res.data.message);
-        }
-      })
-      .catch((err) => console.log(err));
+          setMessage('Erreur lors de la vérification de l\'authentification.');
+        });
+    } else {
+      setAuth(false);
+    }
   }, []);
 
   const handleLogout = () => {
-    axios
-      .get("http://localhost:3000/api/logout", {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((res) => {
-        
-        if (res.data.Status ) {
-         
-          localStorage.removeItem("token"); // Supprimez le token du localStorage
-          window.location.reload();
-        } else {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      axios
+        .get("http://localhost:3000/api/logout", {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          if (res.data.status === "Success") {
+            localStorage.removeItem("token");
+            window.location.reload();
+          } else {
+            alert("Erreur lors de la déconnexion");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
           alert("Erreur lors de la déconnexion");
-        }
-      })
-      .catch((err) => console.log(err));
+        });
+    } else {
+      alert("Erreur lors de la déconnexion");
+    }
   };
 
-
-  return (
+    return (
     <nav id="navbar">
       <input type="checkbox" id="check" />
       <label htmlFor="check" className="checkbtn">
@@ -73,23 +86,23 @@ function Navbar() {
         </li>
         <li id="listNav">
           <a id="lienNav" href="#">
-            Contact
+          A PROPOS
           </a>
         </li>
         {
-        auth ? 
+        auth ?( 
           <li id="listNav">
             <a id="lienNav"  href="/" onClick={handleLogout} >
               déconnexion
             </a>
           </li>
-        : 
+        ):( 
           <li id="listNav">
             <a id="lienNav" href="/login">
               connexion
             </a>
           </li>
-        }
+        )}
         <li id="listNav">
           <a id="devisNav" href="/devis">
             demande de devis
