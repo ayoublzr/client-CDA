@@ -11,7 +11,7 @@ function Navbar() {
 
     if (token) {
       axios
-        .get(`http://localhost:3000/api/isAuth`, {
+        .get(`http://localhost:3003/api/isAuth`, {
           headers: {
             Authorization: token,
           },
@@ -39,7 +39,7 @@ function Navbar() {
 
     if (token) {
       axios
-        .get("http://localhost:3000/api/logout", {
+        .get("http://localhost:3003/api/logout", {
           headers: {
             Authorization: token,
           },

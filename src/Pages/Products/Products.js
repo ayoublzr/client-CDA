@@ -14,7 +14,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/products")
+      .get("http://localhost:3003/api/products")
       .then((res) => {
         console.log(res.data);
         setProducts(res.data);
@@ -25,7 +25,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/categories")
+      .get("http://localhost:3003/api/categories")
       .then((res) => {
         console.log(res.data);
         setCategories(res.data);
@@ -36,7 +36,7 @@ export default function Products() {
   useEffect(() => {
     if (selectedCategory) {
       axios
-        .get(`http://localhost:3000/api/products/categorie/${selectedCategory}`)
+        .get(`http://localhost:3003/api/products/categorie/${selectedCategory}`)
         .then((res) => {
           console.log(res.data);
           setFilteredProducts(res.data);
@@ -82,17 +82,17 @@ export default function Products() {
                   <a href="#" target="_blank">
                     <img
                       src={
-                        "http://localhost:3000/assets/uploads/" + product.image
+                        "http://localhost:3003/assets/uploads/" + product.image
                       }
                       alt={product.image}
                     />
                   </a>
                   <div className="down-content">
-                    <a href="#" target="_blank">
+                  <a href={"/product/" + product.id}>
                       <h4>{product.name}</h4>
                     </a>
                     <p id="descriptionCard">{product.description}</p>
-                    <button id="btnCard">Voir plus</button>
+                    <button id="btnCard" href={"/product/" + product.id}>Voir plus</button>
                   </div>
                 </div>
               </div>

@@ -7,7 +7,7 @@ import axios from 'axios';
 export default function ActivationPage() {
     const{activationcode}=useParams()
     console.log(activationcode)
-    axios.post(`http://localhost:3000/api/auth/verifyuser/${activationcode}`)
+    axios.post(`http://localhost:3003/api/auth/verifyuser/${activationcode}`)
     
   return (
     <div>

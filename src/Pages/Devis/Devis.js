@@ -1,17 +1,26 @@
-
 import Navbar from "../../components/navBar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import React, { useState, useEffect } from "react";
 import jwt from "jwt-decode";
 import axios from "axios";
 import "./styleDevis.css";
-import { Button, FloatingLabel, Form, InputGroup } from "react-bootstrap";
+import {
+  Button,
+  FloatingLabel,
+  Form,
+  InputGroup,
+  Alert,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function Devis() {
   const [categories, setCategories] = useState([]);
   const [produits, setProduits] = useState([]);
   const [id, setId] = useState();
   const [commentaire, setCommentaire] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+  const [isAuth, setIsAuth] = useState(true)
+  const navigate = useNavigate();
 
   const [forms, setForms] = useState([
     { categorie: "", product: "", surface: "", description: "" },
@@ -20,7 +29,7 @@ function Devis() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/categories")
+      .get("http://localhost:3003/api/categories")
       .then((res) => {
         setCategories(res.data);
       })
@@ -31,7 +40,7 @@ function Devis() {
     forms.forEach((form, index) => {
       if (form.categorie) {
         axios
-          .get(`http://localhost:3000/api/products/categorie/${form.categorie}`)
+          .get(`http://localhost:3003/api/products/categorie/${form.categorie}`)
           .then((res) => {
             const updatedProduits = [...produits];
             updatedProduits[index] = res.data;
@@ -41,16 +50,23 @@ function Devis() {
       }
     });
   }, [forms]);
-  useEffect(() => {
-    // Logique pour récupérer le token du client
-     localStorage.getItem("token"); // Exemple : stockage du token dans le localStorage
-    const dataToken = jwt(token);
-    setId(dataToken.id);
-    
 
-    setToken(token);
-    
-  }, [token]);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const dataToken = jwt(token);
+      setId(dataToken.id);
+      setShowMessage(false);
+    } else {
+      setShowMessage(true);
+      setIsAuth(false)
+      setTimeout(() => {
+        navigate("/login");
+        setShowMessage(false);
+      }, 3000); 
+    }
+  }, [navigate]);
+
   const handleCommentaireChange = (e) => {
     const { value } = e.target;
     setCommentaire(value);
@@ -102,32 +118,31 @@ function Devis() {
   const handleRemoveForm = (index) => {
     setForms((prevForms) => prevForms.filter((form, i) => i !== index));
   };
- 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const devisData = {
       UserId: id,
       commentaire: commentaire,
-      token: token
+      token: token,
     };
-  
+
     // Envoyer la requête pour créer le devis
     axios
-      .post("http://localhost:3000/api/devis", devisData)
+      .post("http://localhost:3003/api/devis", devisData)
       .then((res) => {
         const devisId = res.data.id; // Récupérer l'ID du devis créé
-        
-        
+
         const sendEmailToAdmin = (DeviId) => {
           const devisData = {
             UserId: id,
             token: token,
             DeviId: DeviId,
           };
-        
-          axios.post("http://localhost:3000/api/sendDevis", devisData)
+
+          axios
+            .post("http://localhost:3003/api/sendDevis", devisData)
             .then((res) => {
               console.log("E-mail sent successfully!");
             })
@@ -135,7 +150,7 @@ function Devis() {
               console.log("Error sending e-mail:", error);
             });
         };
-  
+
         // Créer les devisDetails pour chaque produit dans le formulaire
         const requests = forms.map((form) => {
           const devisDetailsData = {
@@ -144,22 +159,24 @@ function Devis() {
             DeviId: devisId,
             ProductId: form.product,
           };
-          
-  
+
           // Retourner la promesse pour chaque requête de création de devisDetails
-          return axios.post("http://localhost:3000/api/devis-details", devisDetailsData);
+          return axios.post(
+            "http://localhost:3003/api/devis-details",
+            devisDetailsData
+          );
         });
-  
+
         // Exécuter toutes les requêtes de création de devisDetails en parallèle
         return Promise.all(requests)
           .then(() => {
             // Réinitialiser le formulaire après la création du devis
-            setForms([{ categorie: "", product: "", surface: "", description: "" }]);
+            setForms([
+              { categorie: "", product: "", surface: "", description: "" },
+            ]);
             // Autres actions de réussite (affichage d'un message, redirection, etc.)
-      sendEmailToAdmin( devisId);
-            
+            sendEmailToAdmin(devisId);
           })
-          
           .catch((error) => {
             console.log(error);
             // Gérer les erreurs (affichage d'un message, etc.)
@@ -174,7 +191,15 @@ function Devis() {
   return (
     <div>
       <Navbar />
-      <Form className="formDevis" onSubmit={handleSubmit} action="http://localhost:3000/api/sendDevis" method="POST">
+      {showMessage && (
+        <Alert variant="danger">
+          Veuillez vous connecter pour accéder à la page de demande de devis.
+        </Alert>
+      )}
+      {isAuth &&(
+
+
+      <Form className="formDevis" onSubmit={handleSubmit}>
         {forms.map((form, index) => (
           <div key={index}>
             <Form.Select
@@ -250,6 +275,7 @@ function Devis() {
         </Form.Group>
         <Button type="submit">Envoyer</Button>
       </Form>
+      )}
       <Footer />
     </div>
   );

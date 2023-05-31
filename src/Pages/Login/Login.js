@@ -15,7 +15,7 @@ function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    axios.post('http://localhost:3000/api/login', {
+    axios.post('http://localhost:3003/api/login', {
       email,
       password
     })

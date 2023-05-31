@@ -12,7 +12,7 @@ export default function ResetPassword() {
     event.preventDefault();
 
     axios
-      .post(`http://localhost:3000/api/resetpassword/`, {
+      .post(`http://localhost:3003/api/resetpassword/`, {
         email: email,
       })
       .then((response) => {

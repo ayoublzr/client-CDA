@@ -13,7 +13,7 @@ export default function NewPassword() {
     event.preventDefault();
 
     axios
-      .post(`http://localhost:3000/api/newpassword/${activationcode}`, {
+      .post(`http://localhost:3003/api/newpassword/${activationcode}`, {
         password: password,
         repeatPassword: repeatPassword,
       })

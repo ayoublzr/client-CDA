@@ -12,6 +12,7 @@ import Devis from "./Pages/Devis/Devis";
 import ActivationPage from "./components/ActivationPage/ActivationPage";
 import NewPassword from "./components/resetPassword/newPassword";
 import ResetPassword from "./components/resetPassword/resetPassword";
+import Product from "./Pages/Product/Product";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
       <Route path="/confirm/:activationcode" element={<ActivationPage/>} />
       <Route path="/newpassword/:activationcode" element={<NewPassword/>} />
       <Route path="/resetpassword" element={<ResetPassword/>} />
+      <Route path="/product/:id" element={<Product/>} />
     </Routes>
   );
 }

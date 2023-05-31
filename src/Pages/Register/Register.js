@@ -22,7 +22,7 @@ function Register() {
     const errors = validateForm();
     if (errors.length === 0) {
       axios
-        .post("http://localhost:3000/api/register", {
+        .post("http://localhost:3003/api/register", {
           username: username,
           email: email,
           phone: phone,
@@ -76,7 +76,7 @@ function Register() {
   return (
     <div>
       <Navbar />
-      <Form className="formRegister" onSubmit={handleSubmit}>
+      <Form className="formRegister" onSubmit={handleSubmit} >
         <h1 className="titleRegister">Crée un compte</h1>
       
         <Form.Group className="mb-3" controlId="formBasicUsername">
