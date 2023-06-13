@@ -4,7 +4,7 @@ import axios from "axios";
 
 function Navbar() {
   const [auth, setAuth] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,7 +27,7 @@ function Navbar() {
         .catch((err) => {
           console.log(err);
           setAuth(false);
-          setMessage('Erreur lors de la vérification de l\'authentification.');
+          setMessage("Erreur lors de la vérification de l'authentification.");
         });
     } else {
       setAuth(false);
@@ -36,6 +36,7 @@ function Navbar() {
 
   const handleLogout = () => {
     const token = localStorage.getItem("token");
+    localStorage.removeItem("token");
 
     if (token) {
       axios
@@ -46,7 +47,6 @@ function Navbar() {
         })
         .then((res) => {
           if (res.data.status === "Success") {
-            localStorage.removeItem("token");
             window.location.reload();
           } else {
             alert("Erreur lors de la déconnexion");
@@ -61,7 +61,7 @@ function Navbar() {
     }
   };
 
-    return (
+  return (
     <nav id="navbar">
       <input type="checkbox" id="check" />
       <label htmlFor="check" className="checkbtn">
@@ -86,17 +86,16 @@ function Navbar() {
         </li>
         <li id="listNav">
           <a id="lienNav" href="#">
-          A PROPOS
+            A PROPOS
           </a>
         </li>
-        {
-        auth ?( 
+        {auth ? (
           <li id="listNav">
-            <a id="lienNav"  href="/" onClick={handleLogout} >
+            <a id="lienNav" href="/" onClick={handleLogout}>
               déconnexion
             </a>
           </li>
-        ):( 
+        ) : (
           <li id="listNav">
             <a id="lienNav" href="/login">
               connexion

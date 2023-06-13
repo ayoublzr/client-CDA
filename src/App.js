@@ -9,7 +9,7 @@ import Products from "./Pages/Products/Products";
 import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import Devis from "./Pages/Devis/Devis";
-import ActivationPage from "./components/ActivationPage/ActivationPage";
+import ActivationPage from "./Pages/ActivationPage/ActivationPage";
 import NewPassword from "./components/resetPassword/newPassword";
 import ResetPassword from "./components/resetPassword/resetPassword";
 import Product from "./Pages/Product/Product";

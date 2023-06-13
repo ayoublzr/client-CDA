@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Product.css";
 import Navbar from "../../components/navBar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { Container } from "react-bootstrap";
+
 
 export default function Product() {
   const { id } = useParams();
