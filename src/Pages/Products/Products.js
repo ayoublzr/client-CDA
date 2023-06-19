@@ -45,7 +45,7 @@ export default function Products() {
     } else {
       setFilteredProducts(products);
     }
-  }, [selectedCategory, products]);
+  }, [selectedCategory]);
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -91,7 +91,8 @@ export default function Products() {
                   <a href={"/product/" + product.id}>
                       <h4>{product.name}</h4>
                     </a>
-                    <p id="descriptionCard">{product.description}</p>
+                    <p id="descriptionCard">{product.description.substring(0, 20)}...</p>
+
                     <button id="btnCard" href={"/product/" + product.id}>Voir plus</button>
                   </div>
                 </div>

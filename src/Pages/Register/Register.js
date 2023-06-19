@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -19,8 +17,8 @@ function Register() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const errors = validateForm();
-    if (errors.length === 0) {
+    const validationErrors = validateForm();
+    if (validationErrors.length === 0) {
       axios
         .post("http://localhost:3003/api/register", {
           username: username,
@@ -35,50 +33,57 @@ function Register() {
         })
         .catch((error) => {
           console.log(error.response.data);
-          // Afficher un message d'erreur ou une notification pour l'utilisateur
+          setErrors(error.response.data.errors);
         });
     } else {
-      setErrors(errors);
+      setErrors(validationErrors);
     }
   };
 
   const validateForm = () => {
-    const errors = [];
+    const validationErrors = [];
     if (!username.trim()) {
-      errors.push("Le champ 'Nom' est obligatoire");
+      validationErrors.push("Le champ 'Nom' est obligatoire");
     }
     if (!email.trim()) {
-      errors.push("Le champ 'Email' est obligatoire");
+      validationErrors.push("Le champ 'Email' est obligatoire");
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.push("Le champ 'Email' n'est pas valide");
+      validationErrors.push("Le champ 'Email' n'est pas valide");
     }
     if (!phone.trim()) {
-      errors.push("Le champ 'Phone' est obligatoire");
+      validationErrors.push("Le champ 'Phone' est obligatoire");
     } else if (!/^\d+$/.test(phone)) {
-      errors.push("Le champ 'Phone' n'est pas valide");
+      validationErrors.push("Le champ 'Phone' n'est pas valide");
     }
     if (!password.trim()) {
-      errors.push("Le champ 'Password' est obligatoire");
+      validationErrors.push("Le champ 'Password' est obligatoire");
     } else if (password.length < 8) {
-      errors.push("Le champ 'Password' doit contenir au moins 8 caractères");
+      validationErrors.push("Le champ 'Password' doit contenir au moins 8 caractères");
     }
     if (!repeatPassword.trim()) {
-      errors.push("Le champ 'Repeat password' est obligatoire");
+      validationErrors.push("Le champ 'Repeat password' est obligatoire");
     } else if (repeatPassword !== password) {
-      errors.push(
+      validationErrors.push(
         "Les champs 'Password' et 'Repeat password' doivent correspondre"
       );
     }
-    return errors;
+    return validationErrors;
   };
- 
 
   return (
     <div>
       <Navbar />
-      <Form className="formRegister" onSubmit={handleSubmit} >
+      <Form className="formRegister" onSubmit={handleSubmit}>
         <h1 className="titleRegister">Crée un compte</h1>
-      
+
+        {errors.length > 0 && (
+          <Alert variant="danger">
+            
+              <p >{errors[0]}</p>
+            
+          </Alert>
+        )}
+
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Nom:</Form.Label>
           <Form.Control
@@ -87,9 +92,6 @@ function Register() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          {errors.includes("Le champ 'Nom' est obligatoire") && (
-            <Alert variant="danger">Le champ 'Nom' est obligatoire</Alert>
-          )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email:</Form.Label>
@@ -99,12 +101,6 @@ function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          {errors.includes("Le champ 'Email' est obligatoire") && (
-            <Alert variant="danger">Le champ 'Email' est obligatoire</Alert>
-          )}
-          {errors.includes("Le champ 'Email' n'est pas valide") && (
-            <Alert variant="danger">Le champ 'Email' n'est pas valide</Alert>
-          )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPhone">
           <Form.Label>Téléphone:</Form.Label>
@@ -114,12 +110,6 @@ function Register() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
-          {errors.includes("Le champ 'Phone' est obligatoire") && (
-            <Alert variant="danger">Le champ 'Phone' est obligatoire</Alert>
-          )}
-          {errors.includes("Le champ 'Phone' n'est pas valide") && (
-            <Alert variant="danger">Le champ 'Phone' n'est pas valide</Alert>
-          )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Mot de passe:</Form.Label>
@@ -129,16 +119,6 @@ function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.includes("Le champ 'password' est obligatoire") && (
-            <Alert variant="danger">Le champ 'Mot de passe' est obligatoire</Alert>
-          )}
-          {errors.includes(
-            "Le champ 'password' doit contenir au moins 8 caractères"
-          ) && (
-            <Alert variant="danger">
-              Le champ 'Mot de passe' doit contenir au moins 8 caractères
-            </Alert>
-          )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicRepeatPassword">
           <Form.Label>Confirmation mot de passe:</Form.Label>
@@ -148,22 +128,10 @@ function Register() {
             value={repeatPassword}
             onChange={(e) => setRepeatPassword(e.target.value)}
           />
-          {errors.includes("Le champ 'Repeat password' est obligatoire") && (
-            <Alert variant="danger">
-              Le champ 'Confirmation mot de passe' est obligatoire
-            </Alert>
-          )}
-          {errors.includes(
-            "Les champs 'Password' et 'Repeat password' doivent correspondre"
-          ) && (
-            <Alert variant="danger">
-              Les champs 'Mot de passe' et 'Confirmation mot de passe' doivent correspondre
-            </Alert>
-          )}
         </Form.Group>
         <Button className="btnRegister" type="submit">
-      S'inscrire
-    </Button>
+          S'inscrire
+        </Button>
       </Form>
       <Footer />
     </div>
