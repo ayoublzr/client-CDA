@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navBar/Navbar";
@@ -13,14 +13,29 @@ function Register() {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const navigate = useNavigate();
+  const URL= process.env.REACT_APP_URL
+  useEffect(() => {
+    let timer;
+    if (showSuccessMessage) {
+      timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+        navigate("/login"); // Redirection vers la page de login
+      }, 4000);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [showSuccessMessage, navigate]);
 
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const validationErrors = validateForm();
     if (validationErrors.length === 0) {
       axios
-        .post("http://localhost:3003/api/register", {
+        .post(`${URL}/api/register`, {
           username: username,
           email: email,
           phone: phone,
@@ -29,8 +44,10 @@ function Register() {
         })
         .then((response) => {
           console.log(response.data);
-          navigate("/login");
+          setShowSuccessMessage(true);
+          
         })
+        
         .catch((error) => {
           console.log(error.response.data);
           setErrors(error.response.data.errors);
@@ -51,20 +68,24 @@ function Register() {
       validationErrors.push("Le champ 'Email' n'est pas valide");
     }
     if (!phone.trim()) {
-      validationErrors.push("Le champ 'Phone' est obligatoire");
+      validationErrors.push("Le champ 'Téléphone' est obligatoire");
     } else if (!/^\d+$/.test(phone)) {
-      validationErrors.push("Le champ 'Phone' n'est pas valide");
+      validationErrors.push("Le champ 'Téléphone' n'est pas valide");
+    }else if (phone.length < 10) {
+      validationErrors.push("Le champ 'Téléphone' doit contenir au moins 10 caractères");
     }
     if (!password.trim()) {
-      validationErrors.push("Le champ 'Password' est obligatoire");
+      validationErrors.push("Le champ 'Mot de passe' est obligatoire");
     } else if (password.length < 8) {
-      validationErrors.push("Le champ 'Password' doit contenir au moins 8 caractères");
+      validationErrors.push(
+        "Le champ 'Mot de passe' doit contenir au moins 8 caractères"
+      );
     }
     if (!repeatPassword.trim()) {
-      validationErrors.push("Le champ 'Repeat password' est obligatoire");
+      validationErrors.push("Le champ 'Confirmation mot de passe' est obligatoire");
     } else if (repeatPassword !== password) {
       validationErrors.push(
-        "Les champs 'Password' et 'Repeat password' doivent correspondre"
+        "Les champs 'Mot de passe' et 'Confirmation mot de passe' doivent correspondre"
       );
     }
     return validationErrors;
@@ -73,14 +94,17 @@ function Register() {
   return (
     <div>
       <Navbar />
+      {showSuccessMessage && ( 
+        <Alert variant="success">
+          Veuillez vérifier votre adresse e-mail pour valider votre compte.
+        </Alert>
+      )}
       <Form className="formRegister" onSubmit={handleSubmit}>
         <h1 className="titleRegister">Crée un compte</h1>
 
         {errors.length > 0 && (
           <Alert variant="danger">
-            
-              <p >{errors[0]}</p>
-            
+            <p>{errors[0]}</p>
           </Alert>
         )}
 

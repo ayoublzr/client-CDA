@@ -11,10 +11,10 @@ export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-
+  const URL= process.env.REACT_APP_URL
   useEffect(() => {
     axios
-      .get("http://localhost:3003/api/products")
+      .get(`${URL}/api/products`)
       .then((res) => {
         console.log(res.data);
         setProducts(res.data);
@@ -25,7 +25,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3003/api/categories")
+      .get(`${URL}/api/categories`)
       .then((res) => {
         console.log(res.data);
         setCategories(res.data);
@@ -36,7 +36,7 @@ export default function Products() {
   useEffect(() => {
     if (selectedCategory) {
       axios
-        .get(`http://localhost:3003/api/products/categorie/${selectedCategory}`)
+        .get(`${URL}/api/products/categorie/${selectedCategory}`)
         .then((res) => {
           console.log(res.data);
           setFilteredProducts(res.data);
@@ -56,9 +56,9 @@ export default function Products() {
       <Navbar />
       <Form>
         <Form.Group id="selectCategorie" className="mb-3">
-          <Form.Label style={{ color: "white" }}>Select a category</Form.Label>
+          <Form.Label style={{ color: "white" }}>Sélectionné une catégorie </Form.Label>
           <Form.Select onChange={handleCategoryChange} value={selectedCategory}>
-            <option value="">All Categories</option>
+            <option value="">Toutes les catégories</option>
             {categories.map((categorie) => (
               <option key={categorie.id} value={categorie.id}>
                 {categorie.name}
@@ -81,19 +81,21 @@ export default function Products() {
                 >
                   <a href="#" target="_blank">
                     <img
-                      src={
-                        "http://localhost:3003/assets/uploads/" + product.image
-                      }
+                      src={`${URL}/assets/uploads/` + product.image}
                       alt={product.image}
                     />
                   </a>
                   <div className="down-content">
-                  <a href={"/product/" + product.id}>
+                    <a href={"/product/" + product.id}>
                       <h4>{product.name}</h4>
                     </a>
-                    <p id="descriptionCard">{product.description.substring(0, 20)}...</p>
+                    <p id="descriptionCard">
+                      {product.description.substring(0, 20)}...
+                    </p>
 
-                    <button id="btnCard" href={"/product/" + product.id}>Voir plus</button>
+                    <button id="btnCard" href={"/product/" + product.id}>
+                      Voir plus
+                    </button>
                   </div>
                 </div>
               </div>

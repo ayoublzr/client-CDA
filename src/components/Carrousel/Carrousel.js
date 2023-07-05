@@ -1,46 +1,52 @@
 import Carousel from 'react-bootstrap/Carousel';
+import SLIDER_IMAGES from "./sliderImages";
 
+import "./style.css"
 function Carrousel() {
   return (
-    <Carousel>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src="./images/carrousel1.jpg"
-          alt="First slide"
-        />
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src="./images/carrousel2.jpg"
-          alt="Second slide"
-        />
-
-        <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src="./images/carrousel3.jpg"
-          alt="Third slide"
-        />
-
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-          </p>
-        </Carousel.Caption>
-      </Carousel.Item>
-    </Carousel>
+    <div className='af-height-90 af-max-width mx-auto mt-2'>
+      <Carousel>
+        <Carousel.Item>
+          <img
+            className='d-block w-100 carousel-image'
+            
+            alt='First slide'
+          />
+          <Carousel.Caption className='position-absolute'>
+            <div className='af-position-lg af-bg-dark-transparent py-3'>
+              <h3>{SLIDER_IMAGES[0].title}</h3>
+              <p>{SLIDER_IMAGES[0].description}</p>
+            </div>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img
+            className='d-block w-100 carousel-image'
+            src={SLIDER_IMAGES[1].link}
+            alt='Second slide'
+          />
+          <Carousel.Caption className='position-absolute'>
+            <div className='af-position-lg af-bg-dark-transparent py-3'>
+              <h3>{SLIDER_IMAGES[1].title}</h3>
+              <p>{SLIDER_IMAGES[1].description}</p>
+            </div>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img
+            className='d-block w-100 carousel-image'
+            src={SLIDER_IMAGES[2].link}
+            alt='Third slide'
+          />
+          <Carousel.Caption className='position-absolute'>
+            <div className='af-position-lg af-bg-dark-transparent py-3'>
+              <h3>{SLIDER_IMAGES[2].title}</h3>
+              <p>{SLIDER_IMAGES[2].description}</p>
+            </div>
+          </Carousel.Caption>
+        </Carousel.Item>
+      </Carousel>
+    </div>
   );
 }
 

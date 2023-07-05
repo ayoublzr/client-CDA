@@ -48,7 +48,7 @@ export default function ResetPassword() {
         </Form.Group>
 
         <Button className="btnRegister" type="submit">
-          Submit
+          Modifier
         </Button>
       </Form>
     </div>

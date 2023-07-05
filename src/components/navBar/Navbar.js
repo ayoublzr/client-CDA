@@ -5,13 +5,13 @@ import axios from "axios";
 function Navbar() {
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState("");
-
+  const URL = process.env.REACT_APP_URL;
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
       axios
-        .get(`http://localhost:3003/api/isAuth`, {
+        .get(`${URL}/api/isAuth`, {
           headers: {
             Authorization: token,
           },
@@ -40,7 +40,7 @@ function Navbar() {
 
     if (token) {
       axios
-        .get("http://localhost:3003/api/logout", {
+        .get(`${URL}/api/logout`, {
           headers: {
             Authorization: token,
           },
